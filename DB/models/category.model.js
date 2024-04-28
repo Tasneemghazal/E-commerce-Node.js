@@ -20,8 +20,8 @@ const categorySchema = new Schema({
         default:'active',
         enum:['active','inactive']
     },
-    createdBy:{type:Types.ObjectId,ref:'User',required:true},
-    updatedBy:{type:Types.ObjectId,ref:'User',required:true},
+    createdBy:{type:Types.ObjectId,ref:'User'},
+    updatedBy:{type:Types.ObjectId,ref:'User'},
 
 },{
     timestamps:true,
