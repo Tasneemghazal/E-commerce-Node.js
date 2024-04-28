@@ -1,23 +1,23 @@
-import multer from 'multer';
+import multer from "multer";
 
-export const fileTypes ={
-    image:['image/png', 'image/gif','image/jpeg','image/webp','image/svg'],
-    pdf:['application/pdf']
-}
+export const fileTypes = {
+  image: ["image/png", "image/jpeg", "image/webp"],
+  pdf: ["application/pdf"],
+};
 
-const uploadFile = (customeType =[])=>{
-    const storage = multer.diskStorage({});
+function uploadFile(customTypes = []) {
+  const storage = multer.diskStorage({});
 
-    function fileFilter(req,file,cb){
-        if(customeType.includes(file.mimeType)){
-            cb(null,file);
-        }else{
-            cb("invalid format",false);
-        }
+  function fileFilter(req, file, cb) {
+    if (customTypes.includes(file.mimetype)) {
+      cb(null, true);
     }
-      
-     const upload = multer({fileFilter,storage })
-     return upload;
+    else{
+        cb('invalid format', false);
+    }
+  }
+  const upload = multer({fileFilter, storage});
+  return upload;
 }
 
 export default uploadFile;
