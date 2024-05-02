@@ -4,4 +4,8 @@ import uploadFile, { fileTypes } from '../../utils/multer.js'
 const categoryRouter = Router({caseSensitive: true});
 categoryRouter.post('/addCategory',uploadFile(fileTypes.image).single('image'),Categories.addCategory);
 categoryRouter.get('/getAll',Categories.getAllCategories);
+categoryRouter.get('/active',Categories.getActive);
+categoryRouter.get('/:id',Categories.getDetails);
+categoryRouter.patch('/:id',uploadFile(fileTypes.image).single('image'),Categories.update);
+categoryRouter.delete('/:id',Categories.destory);
 export default categoryRouter;
