@@ -1,4 +1,5 @@
 import connectDB from "../DB/connection.js";
+import authRouter from "./modules/auth/auth.router.js";
 import categoryRouter from "./modules/category/category.router.js";
 import productRouter from "./modules/product/product.router.js";
 import userRouter from "./modules/user/user.router.js";
@@ -12,6 +13,7 @@ const initApp = (app,express)=>{
     })
     app.use('/category',categoryRouter);
     app.use('/product',productRouter);
+    app.use('/auth',authRouter);
     app.use('/user',userRouter);
     
     app.use('*', (req, res)=>{
