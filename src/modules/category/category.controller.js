@@ -18,6 +18,9 @@ export const addCategory = async (req, res, next) => {
     secure_url,
     public_id,
   };
+  req.body.createdBy = req.user._id;
+  req.body.updatedBy = req.user._id;
+
   const category = await categoryModel.create(req.body);
   return res.status(201).json({ message: "success", category });
 };
@@ -61,6 +64,7 @@ export const update = async (req, res) => {
     category.image = { secure_url, public_id };
   }
   category.status = req.body.status;
+  req.body.updatedBy = req.user._id;
   await category.save();
   return res.json({ message: "success", category });
 };
