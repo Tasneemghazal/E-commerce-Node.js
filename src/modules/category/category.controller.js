@@ -10,7 +10,7 @@ export const addCategory = async (req, res, next) => {
   const { secure_url, public_id } = await cloudinary.uploader.upload(
     req.file.path,
     {
-      folder: "ghazalShop/category",
+      folder: `${process.env.APPNAME}/category`,
     }
   );
   req.body.slug = slugify(req.body.name);
@@ -25,7 +25,10 @@ export const addCategory = async (req, res, next) => {
   return res.status(201).json({ message: "success", category });
 };
 export const getAllCategories = async (req, res, next) => {
-  const categories = await categoryModel.find({});
+  const categories = await categoryModel.find({}).populate([{
+    path:"createdBy",
+    select:"userName"
+  }, {path:"updatedBy", select:"userName"},{path:"subcategory"}]);
   return res.status(200).json({ message: "success", categories });
 };
 export const getActive = async (req, res) => {
@@ -57,7 +60,7 @@ export const update = async (req, res) => {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       req.file.path,
       {
-        folder: "ghazalShop/category",
+        folder: `${process.env.APPNAME}/category`,
       }
     );
     cloudinary.uploader.destroy(category.image.public_id);
