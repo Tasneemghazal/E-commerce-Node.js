@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../../DB/models/user.model.js";
 
-export const auth = () => {
+export const auth = (accessRole=[]) => {
   return async (req, res, next) => {
     const {authorization} = req.headers;
     if (!authorization?.startsWith(process.env.BEARERTOKEN)) {
@@ -12,8 +12,11 @@ export const auth = () => {
     if (!decoded) {
       return res.status(400).json({ message: "invalid token" });
     }
-    const user = await userModel.findById(decoded.id).select("userName");
+    const user = await userModel.findById(decoded.id).select("userName role");
     if (!user) return res.status(404).json({ message: "user not found" });
+    if(!accessRole.includes(user.role)){
+      return res.status(403).json({ message: "not authorized" });
+    }
     req.user = user;
     next();
   };
