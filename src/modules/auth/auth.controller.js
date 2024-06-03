@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../../utils/email.js";
 import { customAlphabet, nanoid } from "nanoid";
 export const register = async (req, res, next) => {
-  const { userName, email, password } = req.body;
+  const { userName, email, password ,phone,address} = req.body;
   const user = await userModel.findOne({ email });
   if (user) {
     return res.status(409).json({ message: "email alreday exists" });
@@ -17,6 +17,8 @@ export const register = async (req, res, next) => {
     userName,
     email,
     password: hashedPassword,
+    phone,
+    address
   });
   await sendEmail(email, "welcome", `<h2>Hello ${userName}</h2>`);
   return res.status(201).json({ message: "success", user: createUser });
