@@ -5,10 +5,6 @@ import { sendEmail } from "../../utils/email.js";
 import { customAlphabet, nanoid } from "nanoid";
 export const register = async (req, res, next) => {
   const { userName, email, password ,phone,address} = req.body;
-  const user = await userModel.findOne({ email });
-  if (user) {
-    return res.status(409).json({ message: "email alreday exists" });
-  }
   const hashedPassword = bcrypt.hashSync(
     password,
     parseInt(process.env.SALTROUND)
