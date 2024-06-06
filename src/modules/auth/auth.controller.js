@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../utils/email.js";
 import { customAlphabet, nanoid } from "nanoid";
+import { emailTemplate } from "../../utils/emailTemplate.js";
+
 export const register = async (req, res, next) => {
   const { userName, email, password ,phone,address} = req.body;
   const hashedPassword = bcrypt.hashSync(
@@ -16,7 +18,8 @@ export const register = async (req, res, next) => {
     phone,
     address
   });
-  await sendEmail(email, "welcome", `<h2>Hello ${userName}</h2>`);
+  const token = jwt.sign({email},process.env.CONFIRM_EMAILTOKEN)
+  await sendEmail(email, "welcome",userName,token);
   return res.status(201).json({ message: "success", user: createUser });
 };
 
@@ -71,3 +74,10 @@ export const forgetPassword = async (req, res, next) => {
   await user.save();
   return res.status(200).json({ message: "success" });
 };
+
+export const confirmEmail = async(req, res)=>{
+  const token = req.params.token;
+  const decoded = jwt.verify (token, process.env.CONFIRM_EMAILTOKEN);
+  await userModel.findOneAndUpdate({email:decoded.email}, {confirmEmail:true});
+  return res.status(200).json({message:"success"});
+  }
