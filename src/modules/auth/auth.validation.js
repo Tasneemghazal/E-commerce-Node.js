@@ -11,3 +11,13 @@ export const loginSchema =Joi.object({
     password:Joi.string().pattern(/^[A-Z][a-z0-9]{3,20}$/),
     
 });
+
+export const sendCodeSchema =Joi.object({
+    email:Joi.string().email().required(),
+});
+
+export const forgetSchema =Joi.object({
+    email:Joi.string().email().required(),
+    password:Joi.string().pattern(/^[A-Z][a-z0-9]{3,20}$/),
+    code:Joi.string().length(4)
+});
