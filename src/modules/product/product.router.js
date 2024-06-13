@@ -9,7 +9,7 @@ productRouter.use('/:productId/review',reviewRouter)
 productRouter.post(
   "/create",auth(endPoints.create),
   uploadFile(fileTypes.image).fields([
-    { name: "mainImage", maxCount: 1 },
+    { name: "image", maxCount: 1 },
     { name: "subImages", maxCount: 5 },
   ]),
   Products.create
