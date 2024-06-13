@@ -29,7 +29,7 @@ const productSchema = new Schema(
     finalPrice: {
       type: Number,
     },
-    mainImage: {
+    image: {
       type: Object,
       required: true,
     },
