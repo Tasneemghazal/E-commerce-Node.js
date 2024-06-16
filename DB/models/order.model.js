@@ -17,10 +17,10 @@ const orderSchema = new Schema(
       },
     ],
     finalPrice: { type: Number, required: true },
-    address: { type: String, required: true },
+    address: { type: String},
     phoneNumber: {
       type: String,
-      required: true,
+      
     },
     paymentType: {
       type: String,
