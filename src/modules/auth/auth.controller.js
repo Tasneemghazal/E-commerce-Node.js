@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../../utils/email.js";
 import { customAlphabet, nanoid } from "nanoid";
 import { emailTemplate } from "../../utils/emailTemplate.js";
-
+import xlsx from 'xlsx';
 export const register = async (req, res, next) => {
   const { userName, email, password ,phone,address} = req.body;
   const hashedPassword = bcrypt.hashSync(
@@ -23,6 +23,13 @@ export const register = async (req, res, next) => {
   return res.status(201).json({ message: "success", user: createUser });
 };
 
+export const addUserExcel = async(req, res)=> {
+  const workbook = xlsx.readFile(req.file.path);
+  const worksheet = workbook.Sheets [workbook.SheetNames[0]];
+  const users = xlsx.utils.sheet_to_json(worksheet);
+  await userModel.insertMany(users);
+  return res.json({message:"success"});
+}
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await userModel.findOne({ email });
