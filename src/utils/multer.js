@@ -3,6 +3,7 @@ import multer from "multer";
 export const fileTypes = {
   image: ["image/png", "image/jpeg", "image/webp"],
   pdf: ["application/pdf"],
+  excel:['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
 };
 
 function uploadFile(customTypes = []) {
