@@ -1,5 +1,5 @@
-import fs from "fs" ;
-import PDFDocument  from "pdfkit";
+import fs from "fs";
+import PDFDocument from "pdfkit";
 
 function createInvoice(invoice, path) {
   let doc = new PDFDocument({ size: "A4", margin: 50 });
@@ -18,10 +18,10 @@ function generateHeader(doc) {
     .image("image.png", 50, 45, { width: 50 })
     .fillColor("#444444")
     .fontSize(20)
-    .text("Tasneem Shop", 110, 57)
+    .text("Ghazal-shop", 110, 57)
     .fontSize(10)
-    .text("Tasneem Shop", 200, 50, { align: "right" })
-    .text("123 Nablus Street", 200, 65, { align: "right" })
+    .text("Ghazal-Shop", 200, 50, { align: "right" })
+    .text("Nablus", 200, 65, { align: "right" })
     .text("Nablus", 200, 80, { align: "right" })
     .moveDown();
 }
@@ -46,7 +46,7 @@ function generateCustomerInformation(doc, invoice) {
     .text(formatDate(new Date()), 150, customerInformationTop + 15)
     .text("Balance Due:", 50, customerInformationTop + 30)
     .text(
-      formatCurrency(invoice.subtotal - invoice.paid),
+      formatCurrency(invoice.subtotal * 100),
       150,
       customerInformationTop + 30
     )
@@ -55,6 +55,7 @@ function generateCustomerInformation(doc, invoice) {
     .text(invoice.shipping.name, 300, customerInformationTop)
     .font("Helvetica")
     .text(invoice.shipping.address, 300, customerInformationTop + 15)
+    .text(invoice.shipping.phone, 300, customerInformationTop + 30)
     
     .moveDown();
 
@@ -69,10 +70,10 @@ function generateInvoiceTable(doc, invoice) {
   generateTableRow(
     doc,
     invoiceTableTop,
-    "productName",
-    "quantity",
-    "unitPrice",
-    "finalPrice",
+    "Name",
+    "Quantity",
+    "Unit Price",
+    "final Price"   
   );
   generateHr(doc, invoiceTableTop + 20);
   doc.font("Helvetica");
@@ -85,7 +86,9 @@ function generateInvoiceTable(doc, invoice) {
       position,
       item.productName,
       item.quantity,
-      formatCurrency(item.unitPrice*100)
+     
+      formatCurrency(item.unitPrice * 100),
+      formatCurrency(item.finalPrice * 100),
     );
 
     generateHr(doc, position + 20);
@@ -99,31 +102,13 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "Subtotal",
     "",
-    formatCurrency(invoice.subtotal*100)
+    formatCurrency(invoice.subtotal * 100)
   );
 
-  const paidToDatePosition = subtotalPosition + 20;
-  generateTableRow(
-    doc,
-    paidToDatePosition,
-    "",
-    "",
-    "Paid To Date",
-    "",
-    formatCurrency(invoice.paid)
-  );
+  
 
-  const duePosition = paidToDatePosition + 25;
-  doc.font("Helvetica-Bold");
-  generateTableRow(
-    doc,
-    duePosition,
-    "",
-    "",
-    "Balance Due",
-    "",
-    formatCurrency(invoice.subtotal )
-  );
+  
+
   doc.font("Helvetica");
 }
 
