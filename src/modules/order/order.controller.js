@@ -3,6 +3,7 @@ import couponModel from "../../../DB/models/coupon.model.js";
 import orderModel from "../../../DB/models/order.model.js";
 import productModel from "../../../DB/models/product.model.js";
 import userModel from "../../../DB/models/user.model.js";
+import createInvoice from "../../utils/pdf.js";
 
 export const create = async (req, res) => {
   try {
@@ -63,6 +64,21 @@ export const create = async (req, res) => {
     });
 
     if (order) {
+      const invoice = {
+        shipping: {
+          name: user.userName,
+          address: order.address,
+          city: "San Francisco",
+          state: "CA",
+          country: "US",
+          postal_code: 94111,
+        },
+        items: order.products,
+        subtotal:order.finalPrice,
+        invoice_nr: order._id,
+      };
+      createInvoice(invoice, "invoice.pdf");
+
       for (const product of req.body.products) {
         await productModel.findByIdAndUpdate(
           { _id: product.productId },
@@ -111,18 +127,17 @@ export const getOrders = async (req, res) => {
   return res.json({ message: "success", orders });
 };
 export const getMyOrders = async (req, res) => {
-  const orders = await orderModel.find({userId: req.user._id})
+  const orders = await orderModel.find({ userId: req.user._id });
   return res.json({ message: "success", orders });
 };
 export const changeStatus = async (req, res) => {
-  const{orderId} =req.params;
-  const {status} = req.body;
-  const order = await orderModel.findById({_id:orderId});
-  if(!order){
-    return res.json({ message: " orders not found"});
+  const { orderId } = req.params;
+  const { status } = req.body;
+  const order = await orderModel.findById({ _id: orderId });
+  if (!order) {
+    return res.json({ message: " orders not found" });
   }
   order.status = status;
   await order.save();
-  return res.json({ message: "success", order});
+  return res.json({ message: "success", order });
 };
-
