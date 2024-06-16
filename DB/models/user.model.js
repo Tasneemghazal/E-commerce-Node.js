@@ -12,6 +12,10 @@ const userSchema = new Schema({
         required:true,
         unique:true,
     },
+    isDeleted:{
+        type:Boolean,
+        default:false,
+    },
     password:{
         type:String,
         required:true,
